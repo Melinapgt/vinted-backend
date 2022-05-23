@@ -6,9 +6,9 @@ const router = express.Router();
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
-  cloud_name: CLOUD_NAME,
-  api_key: CLOUDINARY_API_KEY,
-  api_secret: CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 //import des models
@@ -36,16 +36,18 @@ router.post("/user/signup", async (req, res) => {
         //   console.log(`hash: ${hash}`);
         const token = uid2(16);
         //   console.log(`token: ${token}`);
-        let pictureToUpload = req.files.picture.path;
-        const result = await cloudinary.uploader.upload(pictureToUpload);
-        console.log(result);
+        // if (req.files) {
+        //   let pictureToUpload = req.files.picture.path;
+        //   const result = await cloudinary.uploader.upload(pictureToUpload);
+        //   console.log(result);
+        // }
 
         const newUser = new User({
           email: req.fields.email,
           account: {
             username: req.fields.username,
             phone: req.fields.phone,
-            avatar: result.secure_url,
+            // avatar: result.secure_url,
           },
 
           token: token,
@@ -63,6 +65,7 @@ router.post("/user/signup", async (req, res) => {
       }
     }
   } catch (error) {
+    console.log("error ==>", error);
     res.status(400).json({ message: error.message });
   }
 });

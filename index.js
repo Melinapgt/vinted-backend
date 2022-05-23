@@ -32,6 +32,9 @@ app.use(updatesOffer);
 const offersRoutes = require("./routes/offers");
 app.use(offersRoutes);
 
+const offerRoute = require("./routes/offer");
+app.use(offerRoute);
+
 // import des middleware
 const isAuthenticated = require("./middleware/isAuthenticated");
 app.use(isAuthenticated);

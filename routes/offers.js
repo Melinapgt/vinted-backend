@@ -1,6 +1,8 @@
 const express = require("express");
-const Offer = require("../models/Offer");
 const router = express.Router();
+
+//import des models
+const Offer = require("../models/Offer");
 
 router.get("/offers", async (req, res) => {
   console.log(req.query);
