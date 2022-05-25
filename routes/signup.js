@@ -18,8 +18,9 @@ const sha256 = require("crypto-js/sha256");
 //création d'un nouvel account et user
 
 router.post("/user/signup", async (req, res) => {
-  console.log(req.fields);
   try {
+    console.log(req.fields);
+    console.log("req.files signup==>", req.files);
     const newUserEmail = req.fields.email;
     const searchForEmail = await User.findOne({ email: newUserEmail });
     //   console.log(searchForEmail);
@@ -36,32 +37,52 @@ router.post("/user/signup", async (req, res) => {
         //   console.log(`hash: ${hash}`);
         const token = uid2(16);
         //   console.log(`token: ${token}`);
-        // if (req.files) {
-        //   let pictureToUpload = req.files.picture.path;
-        //   const result = await cloudinary.uploader.upload(pictureToUpload);
-        //   console.log(result);
-        // }
 
-        const newUser = new User({
-          email: req.fields.email,
-          account: {
-            username: req.fields.username,
-            phone: req.fields.phone,
-            // avatar: result.secure_url,
-          },
+        if (req.files) {
+          let pictureToUpload = req.files.picture.path;
+          console.log("picturetoupload ==>", pictureToUpload);
 
-          token: token,
-          hash: hash,
-          salt: salt,
-        });
+          const result = await cloudinary.uploader.upload(pictureToUpload);
+          console.log(result);
 
-        await newUser.save();
+          const newUser = new User({
+            email: req.fields.email,
+            account: {
+              username: req.fields.username,
+              phone: req.fields.phone,
+              avatar: result.secure_url,
+            },
 
-        res.status(200).json({
-          id: newUser.id,
-          token: newUser.token,
-          account: newUser.account,
-        });
+            token: token,
+            hash: hash,
+            salt: salt,
+          });
+
+          await newUser.save();
+          res.status(200).json({
+            id: newUser.id,
+            token: newUser.token,
+            account: newUser.account,
+          });
+        } else {
+          const newUser = new User({
+            email: req.fields.email,
+            account: {
+              username: req.fields.username,
+              phone: req.fields.phone,
+            },
+
+            token: token,
+            hash: hash,
+            salt: salt,
+          });
+          await newUser.save();
+          res.status(200).json({
+            id: newUser.id,
+            token: newUser.token,
+            account: newUser.account,
+          });
+        }
       }
     }
   } catch (error) {

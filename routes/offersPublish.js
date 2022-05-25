@@ -17,7 +17,7 @@ const isAuthenticated = require("../middleware/isAuthenticated");
 
 //création d'une nouvelle annonce
 router.post("/offer/publish", isAuthenticated, async (req, res) => {
-  console.log(req.files);
+  console.log("req.files publish offer ==>", req.files);
   console.log(req.fields);
 
   try {
