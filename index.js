@@ -35,6 +35,9 @@ app.use(offersRoutes);
 const offerRoute = require("./routes/offer");
 app.use(offerRoute);
 
+const paymentRoute = require("./routes/payment");
+app.use(paymentRoute);
+
 // import des middleware
 const isAuthenticated = require("./middleware/isAuthenticated");
 app.use(isAuthenticated);
