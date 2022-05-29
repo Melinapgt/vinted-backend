@@ -13,7 +13,7 @@ router.post("/payment", async (req, res) => {
 
     //transaction
     const response = await stripe.charges.create({
-      amount: Math.round(price * 100),
+      amount: Math.round(amount * 100),
       currency: "eur",
       description: title,
       source: token,
